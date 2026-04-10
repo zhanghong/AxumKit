@@ -1157,151 +1157,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "axumkit_config"
-version = "0.7.0"
-dependencies = [
- "axum",
- "dotenvy",
- "tracing",
-]
-
-[[package]]
-name = "axumkit_constants"
-version = "0.1.0"
-dependencies = [
- "serde",
- "utoipa",
-]
-
-[[package]]
-name = "axumkit_dto"
-version = "0.7.0"
-dependencies = [
- "axum",
- "axum-extra",
- "axumkit_config",
- "axumkit_constants",
- "axumkit_entity",
- "axumkit_errors",
- "chrono",
- "cookie",
- "sea-orm",
- "serde",
- "serde_json",
- "tracing",
- "unicode-general-category",
- "utoipa",
- "uuid",
- "validator",
-]
-
-[[package]]
-name = "axumkit_entity"
-version = "0.7.0"
-dependencies = [
- "sea-orm",
- "serde",
- "utoipa",
- "uuid",
-]
-
-[[package]]
-name = "axumkit_errors"
-version = "0.7.0"
-dependencies = [
- "axum",
- "axumkit_config",
- "sea-orm",
- "serde",
- "tracing",
- "utoipa",
-]
-
-[[package]]
-name = "axumkit_server"
-version = "0.7.0"
-dependencies = [
- "anyhow",
- "argon2",
- "async-nats",
- "aws-config",
- "aws-sdk-s3",
- "axum",
- "axum-extra",
- "axumkit_config",
- "axumkit_constants",
- "axumkit_dto",
- "axumkit_entity",
- "axumkit_errors",
- "axumkit_worker",
- "base64",
- "blake3",
- "chrono",
- "cookie",
- "dotenvy",
- "futures",
- "hex",
- "image",
- "infer",
- "jsonwebtoken",
- "meilisearch-sdk",
- "oauth2",
- "rand 0.10.0",
- "redis",
- "reqwest",
- "sea-orm",
- "serde",
- "serde_json",
- "similar",
- "tokio",
- "tokio-stream",
- "totp-rs",
- "tower",
- "tower-cookies",
- "tower-http",
- "tracing",
- "tracing-appender",
- "tracing-subscriber",
- "utoipa",
- "utoipa-swagger-ui",
- "uuid",
- "zstd",
-]
-
-[[package]]
-name = "axumkit_worker"
-version = "0.7.0"
-dependencies = [
- "anyhow",
- "async-nats",
- "aws-config",
- "aws-sdk-s3",
- "axumkit_constants",
- "axumkit_entity",
- "chrono",
- "chrono-tz",
- "dotenvy",
- "futures",
- "lettre",
- "meilisearch-sdk",
- "minijinja",
- "mrml",
- "redis",
- "sea-orm",
- "serde",
- "serde_json",
- "sitemap-rs",
- "tokio",
- "tokio-cron-scheduler",
- "tracing",
- "tracing-appender",
- "tracing-subscriber",
- "urlencoding",
- "uuid",
- "zstd",
-]
-
-[[package]]
 name = "backon"
 version = "1.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2165,10 +2020,10 @@ name = "e2e"
 version = "0.7.0"
 dependencies = [
  "anyhow",
- "axumkit_dto",
- "axumkit_entity",
  "chrono",
  "futures",
+ "kit_dto",
+ "kit_entity",
  "reqwest",
  "sea-orm",
  "serde",
@@ -3408,6 +3263,152 @@ dependencies = [
  "serde_json",
  "signature 2.2.0",
  "simple_asn1",
+]
+
+[[package]]
+name = "kit_config"
+version = "0.7.0"
+dependencies = [
+ "axum",
+ "dotenvy",
+ "tracing",
+]
+
+[[package]]
+name = "kit_constants"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "utoipa",
+]
+
+[[package]]
+name = "kit_dto"
+version = "0.7.0"
+dependencies = [
+ "axum",
+ "axum-extra",
+ "chrono",
+ "cookie",
+ "kit_config",
+ "kit_constants",
+ "kit_entity",
+ "kit_errors",
+ "sea-orm",
+ "serde",
+ "serde_json",
+ "tracing",
+ "unicode-general-category",
+ "utoipa",
+ "uuid",
+ "validator",
+]
+
+[[package]]
+name = "kit_entity"
+version = "0.7.0"
+dependencies = [
+ "chrono",
+ "sea-orm",
+ "serde",
+ "utoipa",
+ "uuid",
+]
+
+[[package]]
+name = "kit_errors"
+version = "0.7.0"
+dependencies = [
+ "axum",
+ "kit_config",
+ "sea-orm",
+ "serde",
+ "tracing",
+ "utoipa",
+]
+
+[[package]]
+name = "kit_server"
+version = "0.7.0"
+dependencies = [
+ "anyhow",
+ "argon2",
+ "async-nats",
+ "aws-config",
+ "aws-sdk-s3",
+ "axum",
+ "axum-extra",
+ "base64",
+ "blake3",
+ "chrono",
+ "cookie",
+ "dotenvy",
+ "futures",
+ "hex",
+ "image",
+ "infer",
+ "jsonwebtoken",
+ "kit_config",
+ "kit_constants",
+ "kit_dto",
+ "kit_entity",
+ "kit_errors",
+ "kit_worker",
+ "meilisearch-sdk",
+ "oauth2",
+ "rand 0.10.0",
+ "redis",
+ "reqwest",
+ "sea-orm",
+ "serde",
+ "serde_json",
+ "similar",
+ "tokio",
+ "tokio-stream",
+ "totp-rs",
+ "tower",
+ "tower-cookies",
+ "tower-http",
+ "tracing",
+ "tracing-appender",
+ "tracing-subscriber",
+ "utoipa",
+ "utoipa-swagger-ui",
+ "uuid",
+ "zstd",
+]
+
+[[package]]
+name = "kit_worker"
+version = "0.7.0"
+dependencies = [
+ "anyhow",
+ "async-nats",
+ "aws-config",
+ "aws-sdk-s3",
+ "chrono",
+ "chrono-tz",
+ "dotenvy",
+ "futures",
+ "kit_constants",
+ "kit_entity",
+ "lettre",
+ "meilisearch-sdk",
+ "minijinja",
+ "mrml",
+ "redis",
+ "sea-orm",
+ "serde",
+ "serde_json",
+ "sitemap-rs",
+ "tokio",
+ "tokio-cron-scheduler",
+ "tracing",
+ "tracing-appender",
+ "tracing-subscriber",
+ "urlencoding",
+ "uuid",
+ "zstd",
 ]
 
 [[package]]

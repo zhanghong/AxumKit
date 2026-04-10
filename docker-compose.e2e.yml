@@ -12,7 +12,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgrespw
     ports:
-      - "5432"  # Dynamic port allocation
+      - "${POSTGRES_PORT}:5432"  # Dynamic port allocation
     networks:
       - e2e-network
     healthcheck:
@@ -25,6 +25,8 @@ services:
     image: redis:8-alpine
     container_name: e2e-redis-session
     command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy volatile-ttl
+    ports:
+      - "${REDIS_SESSION_PORT}:6379"
     networks:
       - e2e-network
     healthcheck:
@@ -37,6 +39,8 @@ services:
     image: redis:8-alpine
     container_name: e2e-redis-cache
     command: redis-server --maxmemory 1gb --maxmemory-policy allkeys-lru
+    ports:
+      - "${REDIS_CACHE_PORT}:6379"
     networks:
       - e2e-network
     healthcheck:
@@ -51,6 +55,8 @@ services:
     environment:
       MEILI_ENV: development
       MEILI_NO_ANALYTICS: "true"
+    ports:
+      - "${MEILISEARCH_PORT:-7700}:7700"
     networks:
       - e2e-network
     healthcheck:
@@ -64,6 +70,8 @@ services:
     image: nats:2.12.3-alpine
     container_name: e2e-nats
     command: ["--jetstream", "--store_dir=/data", "-m", "8222"]
+    ports:
+      - "${NATS_PORT}:4222"  # NATS client port
     networks:
       - e2e-network
     healthcheck:
@@ -80,7 +88,7 @@ services:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
     ports:
-      - "9000:9000"
+      - "${OBJECT_STORAGE_PORT}:9000"
     networks:
       - e2e-network
     healthcheck:
@@ -113,11 +121,11 @@ services:
       target: server-runtime
     container_name: e2e-server
     ports:
-      - "8000"  # Dynamic port allocation
+      - "${PORT}"  # Dynamic port allocation
     environment:
       ENVIRONMENT: test
       HOST: 0.0.0.0
-      PORT: "8000"
+      PORT: "${PORT}"
       RUST_LOG: info
       POSTGRES_WRITE_HOST: postgres
       POSTGRES_WRITE_PORT: "5432"

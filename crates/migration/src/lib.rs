@@ -11,6 +11,9 @@ mod m20251215_034351_action_resource_type_enum;
 mod m20251215_034352_moderation_resource_type_enum;
 mod m20251215_034415_create_action_logs;
 mod m20260405_073559_create_moderation_logs;
+mod m20260415_000001_permission_enum;
+mod m20260415_000002_create_role_permissions;
+mod m20260415_000003_add_default_role_permissions;
 
 pub struct Migrator;
 
@@ -28,6 +31,9 @@ impl MigratorTrait for Migrator {
             Box::new(m20251215_034352_moderation_resource_type_enum::Migration),
             Box::new(m20251215_034415_create_action_logs::Migration),
             Box::new(m20260405_073559_create_moderation_logs::Migration),
+            Box::new(m20260415_000001_permission_enum::Migration),
+            Box::new(m20260415_000002_create_role_permissions::Migration),
+            Box::new(m20260415_000003_add_default_role_permissions::Migration),
         ]
     }
 }

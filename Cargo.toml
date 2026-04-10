@@ -12,13 +12,13 @@ rust-version = "1.93.0"
 
 [workspace.dependencies]
 # Internal crates
-axumkit_config = { path = "crates/axumkit-config" }
-axumkit_constants = { path = "crates/axumkit-constants" }
-axumkit_dto = { path = "crates/axumkit-dto" }
-axumkit_entity = { path = "crates/axumkit-entity" }
-axumkit_errors = { path = "crates/axumkit-errors" }
-axumkit_worker = { path = "crates/axumkit-worker" }
-axumkit_server = { path = "crates/axumkit-server" }
+kit_config = { path = "crates/kit-config" }
+kit_constants = { path = "crates/kit-constants" }
+kit_errors = { path = "crates/kit-errors" }
+kit_worker = { path = "crates/kit-worker" }
+kit_dto = { path = "crates/kit-dto" }
+kit_entity = { path = "crates/kit-entity" }
+kit_server = { path = "crates/kit-server" }
 
 # External dependencies
 tokio = { version = "1.51.0", features = ["full"] }
