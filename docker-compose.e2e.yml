@@ -12,7 +12,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgrespw
     ports:
-      - "${POSTGRES_PORT}:5432"  # Dynamic port allocation
+      - "${POSTGRES_WRITE_PORT}:5432"  # Dynamic port allocation
     networks:
       - e2e-network
     healthcheck:
