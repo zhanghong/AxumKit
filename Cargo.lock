@@ -3328,6 +3328,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "kit_health"
+version = "0.7.0"
+dependencies = [
+ "async-trait",
+ "axum",
+ "chrono",
+ "kit_config",
+ "kit_errors",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "utoipa",
+]
+
+[[package]]
 name = "kit_server"
 version = "0.7.0"
 dependencies = [
@@ -3353,6 +3369,7 @@ dependencies = [
  "kit_dto",
  "kit_entity",
  "kit_errors",
+ "kit_health",
  "kit_worker",
  "meilisearch-sdk",
  "oauth2",
