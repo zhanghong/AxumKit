@@ -21,6 +21,7 @@ kit_entity = { path = "crates/kit-entity" }
 kit_server = { path = "crates/kit-server" }
 kit_health = { path = "crates/kit-health" }
 kit_user = { path = "crates/kit-user" }
+kit_auth = { path = "crates/kit-auth" }
 
 # External dependencies
 tokio = { version = "1.51.0", features = ["full"] }

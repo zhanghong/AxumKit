@@ -1,0 +1,48 @@
+[package]
+name = "kit_auth"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "Authentication domain module for AxumKit"
+
+[lib]
+name = "kit_auth"
+path = "src/lib.rs"
+
+[dependencies]
+# Internal crates
+kit_config.workspace = true
+kit_constants.workspace = true
+kit_dto.workspace = true
+kit_entity.workspace = true
+kit_errors.workspace = true
+kit_user.workspace = true
+kit_worker.workspace = true
+
+# External dependencies
+axum.workspace = true
+axum-extra.workspace = true
+tower.workspace = true
+tower-http.workspace = true
+tower-cookies.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sea-orm.workspace = true
+redis.workspace = true
+argon2.workspace = true
+oauth2.workspace = true
+totp-rs.workspace = true
+cookie.workspace = true
+reqwest.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+rand.workspace = true
+hex.workspace = true
+base64.workspace = true
+blake3.workspace = true
+utoipa.workspace = true
+validator.workspace = true
+async-trait = "0.1"
