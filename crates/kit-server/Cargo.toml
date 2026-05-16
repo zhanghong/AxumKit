@@ -23,6 +23,7 @@ kit_entity.workspace = true
 kit_errors.workspace = true
 kit_worker.workspace = true
 kit_health.workspace = true
+kit_user.workspace = true
 
 # External dependencies
 tower.workspace = true

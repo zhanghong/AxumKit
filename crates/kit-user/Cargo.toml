@@ -1,0 +1,28 @@
+[package]
+name = "kit_user"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "User domain module for AxumKit"
+
+[lib]
+name = "kit_user"
+path = "src/lib.rs"
+
+[dependencies]
+# Internal crates
+kit_errors.workspace = true
+
+# External dependencies
+axum.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sea-orm.workspace = true
+utoipa.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+validator.workspace = true
+async-trait = "0.1"
