@@ -1,0 +1,26 @@
+[package]
+name = "kit_health"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "Health check domain module for AxumKit"
+
+[lib]
+name = "kit_health"
+path = "src/lib.rs"
+
+[dependencies]
+# Internal crates
+kit_config.workspace = true
+kit_errors.workspace = true
+
+# External dependencies
+axum.workspace = true
+utoipa.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+async-trait = "0.1"
+chrono.workspace = true

@@ -19,6 +19,7 @@ kit_worker = { path = "crates/kit-worker" }
 kit_dto = { path = "crates/kit-dto" }
 kit_entity = { path = "crates/kit-entity" }
 kit_server = { path = "crates/kit-server" }
+kit_health = { path = "crates/kit-health" }
 
 # External dependencies
 tokio = { version = "1.51.0", features = ["full"] }

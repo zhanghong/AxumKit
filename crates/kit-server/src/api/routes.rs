@@ -1,9 +1,9 @@
-use super::health::routes::health_routes;
 use super::openapi::ApiDoc;
 use super::v0::routes::routes::v0_routes;
 use crate::state::AppState;
 use axum::Router;
 use kit_errors::errors::handler_404;
+use kit_health::api::route::health_routes;
 use utoipa_swagger_ui::SwaggerUi;
 
 /// Top-level API router (health + versioned APIs)
