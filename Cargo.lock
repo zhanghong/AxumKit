@@ -3396,6 +3396,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "kit_moderation"
+version = "0.7.0"
+dependencies = [
+ "axum",
+ "chrono",
+ "kit_dto",
+ "kit_entity",
+ "kit_errors",
+ "sea-orm",
+ "serde",
+ "serde_json",
+ "uuid",
+ "utoipa",
+ "validator",
+]
+
+[[package]]
 name = "kit_worker"
 version = "0.7.0"
 dependencies = [
