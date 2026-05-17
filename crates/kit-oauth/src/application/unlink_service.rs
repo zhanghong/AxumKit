@@ -2,7 +2,7 @@ use crate::domain::repository::OAuthRepository;
 use crate::infrastructure::repository::OAuthRepositoryImpl;
 use kit_entity::common::OAuthProvider;
 use kit_errors::errors::{Errors, ServiceResult};
-use sea_orm::DatabaseConnection;
+use sea_orm::{DatabaseConnection, TransactionTrait};
 use tracing::info;
 use uuid::Uuid;
 
