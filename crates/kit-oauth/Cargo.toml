@@ -1,0 +1,38 @@
+[package]
+name = "kit_oauth"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "OAuth domain module for AxumKit"
+
+[lib]
+name = "kit_oauth"
+path = "src/lib.rs"
+
+[dependencies]
+async-trait = "0.1"
+axum.workspace = true
+axum-extra.workspace = true
+tower.workspace = true
+tower-http.workspace = true
+tower-cookies.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sea-orm.workspace = true
+redis.workspace = true
+oauth2.workspace = true
+tracing.workspace = true
+reqwest.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+utoipa.workspace = true
+anyhow.workspace = true
+aws-sdk-s3.workspace = true
+validator.workspace = true
+kit_config.workspace = true
+kit_constants.workspace = true
+kit_dto.workspace = true
+kit_entity.workspace = true
+kit_errors.workspace = true
+kit_worker.workspace = true
