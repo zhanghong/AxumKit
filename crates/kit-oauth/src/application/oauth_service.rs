@@ -1,4 +1,4 @@
-use crate::application::types::{OAuthStateData, PendingSignupData};
+use crate::application::types::PendingSignupData;
 use crate::infrastructure::repository::OAuthRepositoryImpl;
 use kit_config::ServerConfig;
 use kit_entity::common::OAuthProvider;

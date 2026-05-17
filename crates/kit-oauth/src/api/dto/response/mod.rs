@@ -11,7 +11,9 @@ pub mod sign_in;
 pub use sign_in::{OAuthPendingSignupResponse, OAuthSignInResponse};
 
 #[derive(Debug, Clone, Serialize, ToSchema)]
-pub struct OAuthUrlResponse { pub auth_url: String }
+pub struct OAuthUrlResponse {
+    pub auth_url: String,
+}
 
 #[derive(Debug, Clone, Serialize, ToSchema)]
 pub struct OAuthConnectionResponse { pub provider: OAuthProvider, pub created_at: DateTime<Utc> }

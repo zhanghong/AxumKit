@@ -1,4 +1,3 @@
-use crate::application::types::PendingSignupData;
 use crate::application::oauth_service::OAuthApplicationService;
 use crate::domain::repository::OAuthRepository;
 use crate::infrastructure::repository::OAuthRepositoryImpl;

@@ -1,8 +1,6 @@
-use crate::application::types::{OAuthStateData, PendingSignupData, SignInResult};
+use crate::application::types::{PendingSignupData, SignInResult};
 use crate::application::oauth_service::OAuthApplicationService;
-use crate::domain::repository::OAuthRepository;
 use crate::infrastructure::adapter::{exchange_code, fetch_google_user_info, GoogleProvider};
-use crate::infrastructure::config::oauth_config::OAuthProviderConfig;
 use crate::infrastructure::repository::OAuthRepositoryImpl;
 use crate::api::dto::request::OAuthAuthorizeFlow;
 use kit_entity::common::OAuthProvider;
