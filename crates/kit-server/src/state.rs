@@ -2,8 +2,9 @@ use redis::aio::ConnectionManager as RedisClient;
 use std::sync::Arc;
 use tokio::sync::broadcast;
 
-use crate::connection::{MeilisearchClient, R2Client};
+use crate::connection::R2Client;
 use kit_dto::action_logs::ActionLogResponse;
+use kit_search::MeilisearchClient;
 use reqwest::Client as HttpClient;
 use sea_orm::DatabaseConnection as PostgresqlClient;
 

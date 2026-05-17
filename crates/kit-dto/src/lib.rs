@@ -8,6 +8,5 @@ pub mod moderation;
 pub mod oauth;
 pub mod pagination;
 pub mod permission;
-pub mod search;
 pub mod user;
 pub mod validator;

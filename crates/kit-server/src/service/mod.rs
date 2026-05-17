@@ -3,5 +3,4 @@ pub mod auth;
 pub mod eventstream;
 pub mod moderation;
 pub mod oauth;
-pub mod search;
 pub mod user;

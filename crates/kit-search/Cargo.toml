@@ -1,0 +1,33 @@
+[package]
+name = "kit_search"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "Search domain module for AxumKit"
+
+[lib]
+name = "kit_search"
+path = "src/lib.rs"
+
+[dependencies]
+# Internal crates
+kit_config.workspace = true
+kit_constants.workspace = true
+kit_entity.workspace = true
+kit_errors.workspace = true
+
+# External dependencies
+axum.workspace = true
+axum-extra.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sea-orm.workspace = true
+meilisearch-sdk.workspace = true
+utoipa.workspace = true
+validator.workspace = true
+uuid.workspace = true
+anyhow.workspace = true
+async-nats.workspace = true

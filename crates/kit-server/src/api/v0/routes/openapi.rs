@@ -1,9 +1,9 @@
 use super::action_logs::openapi::ActionLogsOpenApi;
 use super::auth::openapi::AuthApiDoc;
 use super::moderation::openapi::ModerationOpenApi;
-use super::search::openapi::SearchApiDoc;
 use super::stream::openapi::StreamOpenApi;
 use super::user::openapi::UserApiDoc;
+use kit_search::SearchApiDoc;
 use utoipa::OpenApi;
 
 #[derive(OpenApi)]

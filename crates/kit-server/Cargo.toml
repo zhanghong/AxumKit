@@ -26,6 +26,7 @@ kit_health.workspace = true
 kit_user.workspace = true
 kit_auth.workspace = true
 kit_oauth.workspace = true
+kit_search.workspace = true
 
 # External dependencies
 tower.workspace = true

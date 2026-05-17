@@ -4,7 +4,7 @@ use kit_config::ServerConfig;
 use kit_dto::action_logs::ActionLogResponse;
 use kit_server::api::routes::api_routes;
 use kit_server::connection::{
-    MeilisearchClient, create_http_client, establish_connection, establish_r2_connection,
+    create_http_client, establish_connection, establish_r2_connection,
     establish_redis_connection,
 };
 use kit_server::eventstream::start_eventstream_subscriber;
@@ -14,6 +14,7 @@ use kit_server::middleware::stability::handle_tower_error;
 use kit_server::middleware::trace_layer_config::make_span_with_request_id;
 use kit_server::state::AppState;
 use kit_server::utils::logger::init_tracing;
+use kit_search::MeilisearchClient;
 use std::net::SocketAddr;
 use std::sync::Arc;
 use std::time::Duration;
