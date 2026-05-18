@@ -1,0 +1,36 @@
+[package]
+name = "kit_action_log"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "Action log domain module for AxumKit"
+
+[lib]
+name = "kit_action_log"
+path = "src/lib.rs"
+
+[dependencies]
+# Internal crates
+kit_config.workspace = true
+kit_constants.workspace = true
+kit_errors.workspace = true
+kit_dto.workspace = true
+kit_entity.workspace = true
+
+# External dependencies
+axum.workspace = true
+axum-extra.workspace = true
+utoipa.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+async-trait = "0.1"
+chrono.workspace = true
+sea-orm.workspace = true
+uuid.workspace = true
+validator.workspace = true
+futures.workspace = true
+tokio-stream.workspace = true
+async-nats.workspace = true

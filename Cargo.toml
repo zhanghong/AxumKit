@@ -25,6 +25,7 @@ kit_auth = { path = "crates/kit-auth" }
 kit_oauth = { path = "crates/kit-oauth" }
 kit_search = { path = "crates/kit-search" }
 kit_moderation = { path = "crates/kit-moderation" }
+kit_action_log = { path = "crates/kit-action-log" }
 
 # External dependencies
 tokio = { version = "1.51.0", features = ["full"] }
