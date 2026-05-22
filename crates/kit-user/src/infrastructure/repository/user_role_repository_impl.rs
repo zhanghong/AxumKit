@@ -1,6 +1,7 @@
 use async_trait::async_trait;
 use chrono::{DateTime, Utc};
-use sea_orm::{ActiveModelTrait, ColumnTrait, ConnectionTrait, EntityTrait, QueryFilter, Set};
+use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, ExprTrait, QueryFilter, Set};
+use std::sync::Arc;
 use uuid::Uuid;
 
 use crate::domain::model::role::Role;
@@ -11,21 +12,19 @@ use crate::domain::model::user_role::{
 use crate::domain::repository::user_role_repository::UserRoleRepository;
 use kit_errors::errors::Errors;
 
-/// User role repository implementation with connection
-pub struct UserRoleRepositoryImplWithConn<'a, C: ConnectionTrait> {
-    conn: &'a C,
+/// User role repository implementation backed by a DatabaseConnection
+pub struct UserRoleRepositoryImpl {
+    conn: Arc<DatabaseConnection>,
 }
 
-impl<'a, C: ConnectionTrait> UserRoleRepositoryImplWithConn<'a, C> {
-    pub fn new(conn: &'a C) -> Self {
+impl UserRoleRepositoryImpl {
+    pub fn new(conn: Arc<DatabaseConnection>) -> Self {
         Self { conn }
     }
 }
 
 #[async_trait]
-impl<'a, C: ConnectionTrait + Send + Sync> UserRoleRepository
-    for UserRoleRepositoryImplWithConn<'a, C>
-{
+impl UserRoleRepository for UserRoleRepositoryImpl {
     async fn create_user_role(
         &self,
         user_id: Uuid,
@@ -40,7 +39,7 @@ impl<'a, C: ConnectionTrait + Send + Sync> UserRoleRepository
             expires_at: Set(expires_at),
         };
 
-        let result = new_role.insert(self.conn).await?;
+        let result = new_role.insert(self.conn.as_ref()).await?;
         Ok(result)
     }
 
@@ -54,7 +53,7 @@ impl<'a, C: ConnectionTrait + Send + Sync> UserRoleRepository
                     .is_null()
                     .or(UserRoleColumn::ExpiresAt.gt(now)),
             )
-            .all(self.conn)
+            .all(self.conn.as_ref())
             .await?
             .into_iter()
             .map(|entry| entry.role)
@@ -69,7 +68,7 @@ impl<'a, C: ConnectionTrait + Send + Sync> UserRoleRepository
         let result = UserRoleEntity::delete_many()
             .filter(UserRoleColumn::UserId.eq(user_id))
             .filter(UserRoleColumn::Role.eq(role))
-            .exec(self.conn)
+            .exec(self.conn.as_ref())
             .await?;
 
         Ok(result.rows_affected)
@@ -83,7 +82,7 @@ impl<'a, C: ConnectionTrait + Send + Sync> UserRoleRepository
             .filter(UserRoleColumn::Role.eq(role))
             .filter(UserRoleColumn::ExpiresAt.is_not_null())
             .filter(UserRoleColumn::ExpiresAt.lte(now))
-            .exec(self.conn)
+            .exec(self.conn.as_ref())
             .await?;
 
         Ok(result.rows_affected)

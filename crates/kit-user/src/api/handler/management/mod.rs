@@ -1,22 +1,23 @@
-use axum::extract::State;
+use axum::extract::{Json, State};
 use axum::response::IntoResponse;
 use sea_orm::DatabaseConnection;
+use std::sync::Arc;
 
 use crate::api::dto::request::{BanUserRequest, GrantRoleRequest, RevokeRoleRequest, UnbanUserRequest};
 use crate::api::dto::response::{BanUserResponse, GrantRoleResponse, RevokeRoleResponse, UnbanUserResponse};
 use crate::application::user_management_application_service::UserManagementApplicationService;
-use crate::infrastructure::repository::user_ban_repository_impl::UserBanRepositoryImplWithConn;
-use crate::infrastructure::repository::user_role_repository_impl::UserRoleRepositoryImplWithConn;
+use crate::infrastructure::repository::user_ban_repository_impl::UserBanRepositoryImpl;
+use crate::infrastructure::repository::user_role_repository_impl::UserRoleRepositoryImpl;
 use kit_errors::errors::Errors;
 
 /// Helper to create user management application service from database connection
 fn create_management_service(db: &DatabaseConnection) -> UserManagementApplicationService {
-    let user_ban_repo = UserBanRepositoryImplWithConn::new(db);
-    let user_role_repo = UserRoleRepositoryImplWithConn::new(db);
+    let user_ban_repo = UserBanRepositoryImpl::new(Arc::new(db.clone()));
+    let user_role_repo = UserRoleRepositoryImpl::new(Arc::new(db.clone()));
 
     let user_management_service = crate::domain::service::user_management_service::UserManagementService::new(
-        std::sync::Arc::new(user_ban_repo),
-        std::sync::Arc::new(user_role_repo),
+        Arc::new(user_ban_repo),
+        Arc::new(user_role_repo),
     );
     UserManagementApplicationService::new(user_management_service)
 }
@@ -35,7 +36,7 @@ fn create_management_service(db: &DatabaseConnection) -> UserManagementApplicati
 )]
 pub async fn ban_user(
     State(db): State<DatabaseConnection>,
-    request: BanUserRequest,
+    Json(request): Json<BanUserRequest>,
 ) -> Result<impl IntoResponse, Errors> {
     let app_service = create_management_service(&db);
 
@@ -59,7 +60,7 @@ pub async fn ban_user(
 )]
 pub async fn unban_user(
     State(db): State<DatabaseConnection>,
-    request: UnbanUserRequest,
+    Json(request): Json<UnbanUserRequest>,
 ) -> Result<impl IntoResponse, Errors> {
     let app_service = create_management_service(&db);
 
@@ -83,7 +84,7 @@ pub async fn unban_user(
 )]
 pub async fn grant_role(
     State(db): State<DatabaseConnection>,
-    request: GrantRoleRequest,
+    Json(request): Json<GrantRoleRequest>,
 ) -> Result<impl IntoResponse, Errors> {
     let app_service = create_management_service(&db);
 
@@ -110,7 +111,7 @@ pub async fn grant_role(
 )]
 pub async fn revoke_role(
     State(db): State<DatabaseConnection>,
-    request: RevokeRoleRequest,
+    Json(request): Json<RevokeRoleRequest>,
 ) -> Result<impl IntoResponse, Errors> {
     let app_service = create_management_service(&db);
 

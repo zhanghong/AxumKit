@@ -54,9 +54,9 @@ pub use api::{
 
 // Re-export infrastructure implementations
 pub use infrastructure::repository::{
-    user_repository_impl::UserRepositoryImplWithConn,
-    user_role_repository_impl::UserRoleRepositoryImplWithConn,
-    user_ban_repository_impl::UserBanRepositoryImplWithConn,
+    user_repository_impl::UserRepositoryImpl,
+    user_role_repository_impl::UserRoleRepositoryImpl,
+    user_ban_repository_impl::UserBanRepositoryImpl,
 };
 
 use sea_orm::DatabaseConnection;
@@ -70,7 +70,7 @@ impl UserServiceFactory {
     pub fn create_profile_service(
         conn: &DatabaseConnection,
     ) -> ProfileApplicationService {
-        let user_repo = UserRepositoryImplWithConn::new(conn);
+        let user_repo = UserRepositoryImpl::new(Arc::new(conn.clone()));
         let profile_service = ProfileService::new(Arc::new(user_repo));
         ProfileApplicationService::new(profile_service)
     }
@@ -79,8 +79,8 @@ impl UserServiceFactory {
     pub fn create_user_management_service(
         conn: &DatabaseConnection,
     ) -> UserManagementApplicationService {
-        let user_ban_repo = UserBanRepositoryImplWithConn::new(conn);
-        let user_role_repo = UserRoleRepositoryImplWithConn::new(conn);
+        let user_ban_repo = UserBanRepositoryImpl::new(Arc::new(conn.clone()));
+        let user_role_repo = UserRoleRepositoryImpl::new(Arc::new(conn.clone()));
         let user_management_service = UserManagementService::new(
             Arc::new(user_ban_repo),
             Arc::new(user_role_repo),

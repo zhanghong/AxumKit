@@ -1,6 +1,7 @@
 use async_trait::async_trait;
 use chrono::{DateTime, Utc};
-use sea_orm::{ActiveModelTrait, ColumnTrait, ConnectionTrait, EntityTrait, QueryFilter, Set};
+use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, ExprTrait, QueryFilter, Set};
+use std::sync::Arc;
 use uuid::Uuid;
 
 use crate::domain::model::user_ban::{
@@ -10,21 +11,19 @@ use crate::domain::model::user_ban::{
 use crate::domain::repository::user_ban_repository::UserBanRepository;
 use kit_errors::errors::Errors;
 
-/// User ban repository implementation with connection
-pub struct UserBanRepositoryImplWithConn<'a, C: ConnectionTrait> {
-    conn: &'a C,
+/// User ban repository implementation backed by a DatabaseConnection
+pub struct UserBanRepositoryImpl {
+    conn: Arc<DatabaseConnection>,
 }
 
-impl<'a, C: ConnectionTrait> UserBanRepositoryImplWithConn<'a, C> {
-    pub fn new(conn: &'a C) -> Self {
+impl UserBanRepositoryImpl {
+    pub fn new(conn: Arc<DatabaseConnection>) -> Self {
         Self { conn }
     }
 }
 
 #[async_trait]
-impl<'a, C: ConnectionTrait + Send + Sync> UserBanRepository
-    for UserBanRepositoryImplWithConn<'a, C>
-{
+impl UserBanRepository for UserBanRepositoryImpl {
     async fn create_user_ban(
         &self,
         user_id: Uuid,
@@ -37,7 +36,7 @@ impl<'a, C: ConnectionTrait + Send + Sync> UserBanRepository
             created_at: Set(Utc::now()),
         };
 
-        let result = new_ban.insert(self.conn).await?;
+        let result = new_ban.insert(self.conn.as_ref()).await?;
         Ok(result)
     }
 
@@ -51,7 +50,7 @@ impl<'a, C: ConnectionTrait + Send + Sync> UserBanRepository
                     .is_null()
                     .or(UserBanColumn::ExpiresAt.gt(now)),
             )
-            .one(self.conn)
+            .one(self.conn.as_ref())
             .await?;
 
         Ok(ban)
@@ -65,7 +64,7 @@ impl<'a, C: ConnectionTrait + Send + Sync> UserBanRepository
     async fn delete_user_ban(&self, user_id: Uuid) -> Result<u64, Errors> {
         let result = UserBanEntity::delete_many()
             .filter(UserBanColumn::UserId.eq(user_id))
-            .exec(self.conn)
+            .exec(self.conn.as_ref())
             .await?;
 
         Ok(result.rows_affected)
@@ -78,7 +77,7 @@ impl<'a, C: ConnectionTrait + Send + Sync> UserBanRepository
             .filter(UserBanColumn::UserId.eq(user_id))
             .filter(UserBanColumn::ExpiresAt.is_not_null())
             .filter(UserBanColumn::ExpiresAt.lte(now))
-            .exec(self.conn)
+            .exec(self.conn.as_ref())
             .await?;
 
         Ok(result.rows_affected)

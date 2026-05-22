@@ -1,6 +1,7 @@
-use axum::extract::{Extension, Path, Query, State};
+use axum::extract::{Extension, Json, Path, Query, State};
 use axum::response::IntoResponse;
 use sea_orm::DatabaseConnection;
+use std::sync::Arc;
 use uuid::Uuid;
 
 use crate::api::dto::request::{
@@ -10,7 +11,7 @@ use crate::api::dto::response::{
     CheckHandleAvailableResponse, PublicUserProfile, UserResponse,
 };
 use crate::application::profile_application_service::ProfileApplicationService;
-use crate::infrastructure::repository::user_repository_impl::UserRepositoryImplWithConn;
+use crate::infrastructure::repository::user_repository_impl::UserRepositoryImpl;
 use kit_errors::errors::Errors;
 
 /// Extension type used by the caller (kit-server) to inject the authenticated user_id.
@@ -22,9 +23,9 @@ pub struct AuthenticatedUser {
 
 /// Helper to create application service from database connection
 fn create_profile_service(db: &DatabaseConnection) -> ProfileApplicationService {
-    let user_repo = UserRepositoryImplWithConn::new(db);
+    let user_repo = UserRepositoryImpl::new(Arc::new(db.clone()));
     let profile_service = crate::domain::service::profile_service::ProfileService::new(
-        std::sync::Arc::new(user_repo),
+        Arc::new(user_repo),
     );
     ProfileApplicationService::new(profile_service)
 }
@@ -64,7 +65,7 @@ pub async fn get_my_profile(
 pub async fn update_my_profile(
     State(db): State<DatabaseConnection>,
     Extension(user): Extension<AuthenticatedUser>,
-    request: UpdateMyProfileRequest,
+    Json(request): Json<UpdateMyProfileRequest>,
 ) -> Result<impl IntoResponse, Errors> {
     let app_service = create_profile_service(&db);
 

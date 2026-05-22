@@ -1,8 +1,9 @@
 use async_trait::async_trait;
 use sea_orm::{
-    ActiveModelTrait, ColumnTrait, ConnectionTrait, EntityTrait, IntoActiveModel, QueryFilter,
-    QuerySelect, Set,
+    ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait,
+    IntoActiveModel, QueryFilter, QuerySelect, Set,
 };
+use std::sync::Arc;
 use uuid::Uuid;
 
 use crate::domain::model::user::{
@@ -14,19 +15,19 @@ use crate::domain::repository::user_repository::{
 };
 use kit_errors::errors::Errors;
 
-/// User repository implementation with connection
-pub struct UserRepositoryImplWithConn<'a, C: ConnectionTrait> {
-    conn: &'a C,
+/// User repository implementation backed by a DatabaseConnection
+pub struct UserRepositoryImpl {
+    conn: Arc<DatabaseConnection>,
 }
 
-impl<'a, C: ConnectionTrait> UserRepositoryImplWithConn<'a, C> {
-    pub fn new(conn: &'a C) -> Self {
+impl UserRepositoryImpl {
+    pub fn new(conn: Arc<DatabaseConnection>) -> Self {
         Self { conn }
     }
 }
 
 #[async_trait]
-impl<'a, C: ConnectionTrait + Send + Sync> UserRepository for UserRepositoryImplWithConn<'a, C> {
+impl UserRepository for UserRepositoryImpl {
     async fn create_user(
         &self,
         _email: String,
@@ -60,19 +61,19 @@ impl<'a, C: ConnectionTrait + Send + Sync> UserRepository for UserRepositoryImpl
             created_at: Default::default(),
         };
 
-        let user = new_user.insert(self.conn).await?;
+        let user = new_user.insert(self.conn.as_ref()).await?;
         Ok(user)
     }
 
     async fn find_user_by_id(&self, id: Uuid) -> Result<Option<UserModel>, Errors> {
-        let user = UserEntity::find_by_id(id).one(self.conn).await?;
+        let user = UserEntity::find_by_id(id).one(self.conn.as_ref()).await?;
         Ok(user)
     }
 
     async fn find_user_by_email(&self, email: String) -> Result<Option<UserModel>, Errors> {
         let user = UserEntity::find()
             .filter(UsersColumn::Email.eq(email))
-            .one(self.conn)
+            .one(self.conn.as_ref())
             .await?;
         Ok(user)
     }
@@ -80,7 +81,7 @@ impl<'a, C: ConnectionTrait + Send + Sync> UserRepository for UserRepositoryImpl
     async fn find_user_by_handle(&self, handle: String) -> Result<Option<UserModel>, Errors> {
         let user = UserEntity::find()
             .filter(UsersColumn::Handle.eq(handle))
-            .one(self.conn)
+            .one(self.conn.as_ref())
             .await?;
         Ok(user)
     }
@@ -92,21 +93,21 @@ impl<'a, C: ConnectionTrait + Send + Sync> UserRepository for UserRepositoryImpl
 
         let users = UserEntity::find()
             .filter(UsersColumn::Id.is_in(ids.to_vec()))
-            .all(self.conn)
+            .all(self.conn.as_ref())
             .await?;
 
         Ok(users)
     }
 
     async fn get_user_by_id(&self, id: Uuid) -> Result<UserModel, Errors> {
-        let user = UserEntity::find_by_id(id).one(self.conn).await?;
+        let user = UserEntity::find_by_id(id).one(self.conn.as_ref()).await?;
         user.ok_or(Errors::UserNotFound)
     }
 
     async fn get_user_by_id_for_update(&self, id: Uuid) -> Result<UserModel, Errors> {
         let user = UserEntity::find_by_id(id)
             .lock_exclusive()
-            .one(self.conn)
+            .one(self.conn.as_ref())
             .await?;
         user.ok_or(Errors::UserNotFound)
     }
@@ -114,7 +115,7 @@ impl<'a, C: ConnectionTrait + Send + Sync> UserRepository for UserRepositoryImpl
     async fn get_user_by_email(&self, email: String) -> Result<UserModel, Errors> {
         let user = UserEntity::find()
             .filter(UsersColumn::Email.eq(email))
-            .one(self.conn)
+            .one(self.conn.as_ref())
             .await?;
         user.ok_or(Errors::UserNotFound)
     }
@@ -122,14 +123,14 @@ impl<'a, C: ConnectionTrait + Send + Sync> UserRepository for UserRepositoryImpl
     async fn get_user_by_handle(&self, handle: String) -> Result<UserModel, Errors> {
         let user = UserEntity::find()
             .filter(UsersColumn::Handle.eq(handle))
-            .one(self.conn)
+            .one(self.conn.as_ref())
             .await?;
         user.ok_or(Errors::UserNotFound)
     }
 
     async fn update_user(&self, user_id: Uuid, params: UserUpdateParams) -> Result<UserModel, Errors> {
         let user = UserEntity::find_by_id(user_id)
-            .one(self.conn)
+            .one(self.conn.as_ref())
             .await?
             .ok_or(Errors::UserNotFound)?;
 
@@ -166,7 +167,7 @@ impl<'a, C: ConnectionTrait + Send + Sync> UserRepository for UserRepositoryImpl
             user_active.totp_backup_codes = Set(totp_backup_codes);
         }
 
-        let updated_user = user_active.update(self.conn).await?;
+        let updated_user = user_active.update(self.conn.as_ref()).await?;
         Ok(updated_user)
     }
 }
